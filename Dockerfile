@@ -33,11 +33,13 @@ RUN set -ex && apk --update --no-cache add \
 RUN set -ex && apk --update --no-cache add \
     protoc~=${proto_version} \
     protobuf~=${proto_version} \
-    protobuf-dev~=${proto_version}
+    protobuf-dev~=${proto_version} \
+    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main
 
 RUN set -ex && apk --update --no-cache add \
     grpc~=${grpc_version} \
-    grpc-dev~=${grpc_version}
+    grpc-dev~=${grpc_version} \
+    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main
 
 WORKDIR /tmp
 
@@ -104,11 +106,13 @@ RUN set -ex && apk --update --no-cache add \
 
 RUN set -ex && apk --update --no-cache add \
     protoc~=${proto_version} \
-    protobuf~=${proto_version}
+    protobuf~=${proto_version} \
+    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main
 
 RUN set -ex && apk --update --no-cache add \
     grpc~=${grpc_version} \
-    grpc-cli~=${grpc_version}
+    grpc-cli~=${grpc_version} \
+    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main
 
 # Add TypeScript support
 
