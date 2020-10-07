@@ -12,7 +12,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build and push Docker images
       run: |
-        docker pull jlundy2/protoc-all:latest
-        docker build -t jlundy2/protoc-all:latest . --cache-from jlundy2/protoc-all:latest
+        docker build -t jlundy2/protoc-all:latest .
         docker login -u ${{ secrets.DOCKERHUB_USERNAME}} -p ${{ secrets.DOCKERHUB_PASSWORD }}
         docker push jlundy2/protoc-all:latest
