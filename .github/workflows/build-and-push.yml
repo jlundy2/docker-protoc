@@ -13,6 +13,6 @@ jobs:
     - name: Build and push Docker images
       run: |
         export NAMESPACE="jlundy2"
-        ./build.sh
+        ./build.sh true
         docker login -u ${{ secrets.DOCKERHUB_USERNAME}} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-        docker push jlundy2/protoc-all:latest
+        ./push.sh
