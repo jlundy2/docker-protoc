@@ -12,6 +12,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build and push Docker images
       run: |
-        docker build -t jlundy2/protoc-all:latest .
-        docker login -u ${{ secrets.DOCKERHUB_USERNAME}} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-        docker push jlundy2/protoc-all:latest
+        export NAMESPACE="jlundy2"
+        build.sh
