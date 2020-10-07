@@ -33,13 +33,11 @@ RUN set -ex && apk --update --no-cache add \
 RUN set -ex && apk --update --no-cache add \
     protoc~=${proto_version} \
     protobuf~=${proto_version} \
-    protobuf-dev~=${proto_version} \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main
+    protobuf-dev~=${proto_version}
 
 RUN set -ex && apk --update --no-cache add \
     grpc~=${grpc_version} \
-    grpc-dev~=${grpc_version} \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+    grpc-dev~=${grpc_version}
 
 WORKDIR /tmp
 
