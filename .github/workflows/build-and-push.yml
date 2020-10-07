@@ -14,3 +14,5 @@ jobs:
       run: |
         export NAMESPACE="jlundy2"
         build.sh
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME}} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+        docker push jlundy2/protoc-all:latest
