@@ -1,10 +1,4 @@
-ARG alpine_version=3.12
-ARG go_version=1.14
-ARG grpc_version
-ARG grpc_java_version
-ARG proto_version
-
-FROM golang:$go_version-alpine$alpine_version AS build
+FROM golang:1.12.9-stretch
 
 # TIL docker arg variables need to be redefined in each build stage
 ARG grpc_version
@@ -12,7 +6,7 @@ ARG grpc_java_version
 ARG grpc_web_version
 ARG proto_version
 
-RUN set -ex && apk --update --no-cache add \
+RUN set -ex && apt-get update && apt-get install -y \
     bash \
     make \
     cmake \
@@ -30,15 +24,15 @@ RUN set -ex && apk --update --no-cache add \
     linux-headers \
     unzip
 
-RUN set -ex && apk --update --no-cache add \
+RUN set -ex && apt-get update && apt-get install \
     protoc~=${proto_version} \
     protobuf~=${proto_version} \
-    protobuf-dev~=${proto_version} \
-    grpc~=${grpc_version} \
-    grpc-dev~=${grpc_version}\
-    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/community
+    protobuf-dev~=${proto_version}
 
+RUN set -ex && apt-get update && apt-get install \
+    grpc~=${grpc_version} \
+    grpc-dev~=${grpc_version}
+ 
 WORKDIR /tmp
 
 RUN git clone -b v${grpc_java_version}.x --recursive https://github.com/grpc/grpc-java.git
@@ -89,12 +83,12 @@ RUN curl -sSL https://github.com/grpc/grpc-web/releases/download/${grpc_web_vers
     -o /tmp/grpc_web_plugin && \
     chmod +x /tmp/grpc_web_plugin
 
-FROM alpine:$alpine_version AS protoc-all
+FROM ubuntu:stretch AS protoc-all
 
 ARG grpc_version
 ARG proto_version
 
-RUN set -ex && apk --update --no-cache add \
+RUN set -ex && apt-get update && apt-get install \
     bash \
     libstdc++ \
     libc6-compat \
@@ -102,13 +96,14 @@ RUN set -ex && apk --update --no-cache add \
     nodejs \
     nodejs-npm
 
-RUN set -ex && apk --update --no-cache add \
+RUN set -ex && apt-get update && apt-get install \
     protoc~=${proto_version} \
     protobuf~=${proto_version} \
+    protobuf-dev~=${proto_version}
+
+RUN set -ex && apt-get update && apt-get install \
     grpc~=${grpc_version} \
-    grpc-cli~=${grpc_version} \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/community
+    grpc-dev~=${grpc_version}
 
 # Add TypeScript support
 
