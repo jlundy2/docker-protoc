@@ -34,18 +34,16 @@ RUN set -ex && apk --update --no-cache add \
     protoc~=${proto_version} \
     protobuf~=${proto_version} \
     protobuf-dev~=${proto_version} \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main
-
-RUN set -ex && apk --update --no-cache add \
     grpc~=${grpc_version} \
-    grpc-dev~=${grpc_version} \
+    grpc-dev~=${grpc_version}\
+    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main \
     --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/community
 
-# WORKDIR /tmp
+WORKDIR /tmp
 
-# RUN git clone -b v${grpc_java_version}.x --recursive https://github.com/grpc/grpc-java.git
-# WORKDIR /tmp/grpc-java/compiler
-# RUN ../gradlew -PskipAndroid=true java_pluginExecutable
+RUN git clone -b v${grpc_java_version}.x --recursive https://github.com/grpc/grpc-java.git
+WORKDIR /tmp/grpc-java/compiler
+RUN ../gradlew -PskipAndroid=true java_pluginExecutable
 
 WORKDIR /tmp
 RUN git clone https://github.com/googleapis/googleapis
@@ -107,11 +105,9 @@ RUN set -ex && apk --update --no-cache add \
 RUN set -ex && apk --update --no-cache add \
     protoc~=${proto_version} \
     protobuf~=${proto_version} \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main
-
-RUN set -ex && apk --update --no-cache add \
     grpc~=${grpc_version} \
     grpc-cli~=${grpc_version} \
+    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/main \
     --repository=http://dl-cdn.alpinelinux.org/alpine/v3.11/community
 
 # Add TypeScript support
@@ -119,7 +115,7 @@ RUN set -ex && apk --update --no-cache add \
 RUN npm config set unsafe-perm true
 RUN npm i -g ts-protoc-gen@0.12.0
 
-# COPY --from=build /tmp/grpc-java/compiler/build/exe/java_plugin/protoc-gen-grpc-java /usr/local/bin/
+COPY --from=build /tmp/grpc-java/compiler/build/exe/java_plugin/protoc-gen-grpc-java /usr/local/bin/
 COPY --from=build /tmp/googleapis/google/ /opt/include/google
 COPY --from=build /tmp/api-common-protos/google/ /opt/include/google
 COPY --from=build /usr/local/bin/prototool /usr/local/bin/prototool
